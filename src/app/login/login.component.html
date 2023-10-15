@@ -1,0 +1,56 @@
+
+
+  <div *ngIf="loading; else content" class="loader container">
+    <span style="--i:1;"></span>
+    <span style="--i:2;"></span>
+    <span style="--i:3;"></span>
+    <span style="--i:4;"></span>
+    <span style="--i:5;"></span>
+    <span style="--i:6;"></span>
+    <span style="--i:7;"></span>
+    <span style="--i:8;"></span>
+    <span style="--i:9;"></span>
+    <span style="--i:10;"></span>
+    <span style="--i:11;"></span>
+    <span style="--i:12;"></span>
+    <span style="--i:13;"></span>
+    <span style="--i:14;"></span>
+    <span style="--i:15;"></span>
+    <span style="--i:16;"></span>
+    <span style="--i:17;"></span>
+    <span style="--i:18;"></span>
+    <span style="--i:19;"></span>
+    <span style="--i:20;"></span>
+  </div>
+  
+		
+
+
+  
+
+
+
+
+<!--  LOADIN PAGEEEEEEEEEEEEEEEEEEE -->
+
+
+
+<ng-template #content>
+<div  class="container"> 
+    <form #login="ngForm" (ngSubmit)="onLog(login)">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Username</label>
+        <input type="username" class="form-control" id="username" ngModel name="username" aria-describedby="username"  required>
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" ngModel name="password"  required>
+      </div>
+      <div class="alert alert-danger" *ngIf="mode==1">
+        <strong>Bad credentials!</strong><br> Invalid username or password.
+      </div>
+      <button type="submit" class="btn btn-primary"  >Connexion</button>
+    </form>
+  </div> 
+</ng-template>
