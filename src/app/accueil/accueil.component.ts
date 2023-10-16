@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+
 import { LoginService } from '../services/login.service';
 import { Login } from '../models/login';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DTOInfoUser } from '../models/DTOInfoUser';
 
 @Component({
   selector: 'app-accueil',
@@ -10,33 +12,26 @@ import { Login } from '../models/login';
 })
 export class AccueilComponent implements OnInit {
 
-  product: any;
-  constructor(private route: ActivatedRoute , private loginServive : LoginService){}
+  constructor(private loginServive : LoginService){}
 
 
-  userInfo : any ;
-  username!: string 
+  userInfo: Login = {
+    username: '',
+    email: '',
+    roles: ''
+  };
   
   ngOnInit(): void {
     
-    
-    
-   
-    let token  = this.loginServive.getToken(); 
-    this.loginServive.getUserProfile(token).subscribe((data) => {
-      console.log(data.username +' 2.5')  
-      this.username = data.username
-
-      this.loginServive.getUserDetails(this.username).subscribe(res=> {
-
+      this.loginServive.getUserDetails(this.loginServive.getToken()).subscribe((res: DTOInfoUser)=> {
         console.log(res);
-        this.userInfo = res
-        this.userInfo = Array.of(this.userInfo)
-
-  
+        
+        this.userInfo.username = res.name;
+        this.userInfo.email = res.email;
+        this.userInfo.roles = res.roles;
        });
-    })
     
   }  
+
 
 }

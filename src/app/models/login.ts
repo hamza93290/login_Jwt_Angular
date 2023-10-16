@@ -1,7 +1,8 @@
 export interface Login {
-
-    username : string
-    email : string
-    roles : string
-   
+    username: string;
+    email: string;
+    roles: String;
 }
+
+
+

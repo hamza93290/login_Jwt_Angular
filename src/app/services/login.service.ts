@@ -38,7 +38,7 @@ export class LoginService {
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
 
-    const expirationTimeInMinutes = 5;
+    const expirationTimeInMinutes = 0.10;
     setTimeout(() => {
       this.removeToken();
     }, expirationTimeInMinutes * 60 * 1000);
@@ -49,7 +49,9 @@ export class LoginService {
   }
 
   removeToken(): void {
+
     localStorage.removeItem(this.tokenKey);
+
   }
 
   // Méthode pour vérifier si le token stocké est le même que le token passé en paramètre
@@ -86,8 +88,23 @@ export class LoginService {
     
   }
 
-  getUserDetails(username: string): Observable<any>   {
-    return this.httpClient.get(`${this.apiUrl}/auth/userDetail/${username}`);
+  getUserDetails(token: string): Observable<any>   {
+   
+    // Create headers with the Authorization header containing the token
+
+    const headers = new HttpHeaders({
+
+      'Authorization': `Bearer ${token}`
+
+    });
+
+    // Include the headers in the HTTP request
+
+    const options = { headers: headers };
+
+    // Make the request to the back-end
+
+    return this.httpClient.get('http://localhost:8080/auth/userDetail', options)
   }
 
 
