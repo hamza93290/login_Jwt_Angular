@@ -38,7 +38,7 @@ export class LoginService {
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
 
-    const expirationTimeInMinutes = 0.10;
+    const expirationTimeInMinutes = 5;
     setTimeout(() => {
       this.removeToken();
     }, expirationTimeInMinutes * 60 * 1000);

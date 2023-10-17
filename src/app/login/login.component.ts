@@ -27,18 +27,22 @@ export class LoginComponent implements OnInit {
      let token = this.loginServ.getToken();
      console.log('token recuperer' , token);
      
+     console.log(token);
      
-     if(this.loginServ.isTokenValid(token) && !null){
+     
+     if(this.loginServ.isTokenValid(token)  ){
+
         console.log("le meme");
-        this.router.navigate(['/accueil'])
+        //this.router.navigate(['/accueil'])
       }else{
         console.log("pas le meme ");
-        this.loading = false;
+        
       }
         try {
           const tokenInfo: any = jwt_decode(token)
           const expireDate: any = tokenInfo.exp; 
           console.log("tokenInfo = %o and expireDate = %o", tokenInfo, expireDate)
+          
           return jwt_decode(token);
         } catch(Error) {
           return null;
@@ -55,10 +59,11 @@ export class LoginComponent implements OnInit {
       console.log(response);
       this.loginServ.setToken(response)
       this.DecodedToken(response)
-      if (!response.error) {
-       console.log("direction acceuil");
-       
-        // this.router.navigate(['/accueil']);
+      this.router.navigate(["/accueil"])
+    },
+    (error) => {
+      if (error.status === 403) {
+        this.mode = 1;
       }
     });
 }
