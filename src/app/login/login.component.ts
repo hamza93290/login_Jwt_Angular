@@ -16,7 +16,7 @@ import { ThisReceiver } from '@angular/compiler';
 export class LoginComponent implements OnInit {
 
 
-  mode:Number=0; 
+  status:Number=0; 
   loading = true;
   constructor( private router : Router , private loginServ : LoginService  ){}
 
@@ -24,29 +24,29 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     
-     let token = this.loginServ.getToken();
-     console.log('token recuperer' , token);
+    //  let token = this.loginServ.getToken();
+    //  console.log('token recuperer' , token);
      
-     console.log(token);
+    //  console.log(token);
      
      
-     if(this.loginServ.isTokenValid(token)  ){
+    //  if(this.loginServ.isTokenValid(token)  ){
 
-        console.log("le meme");
-        //this.router.navigate(['/accueil'])
-      }else{
-        console.log("pas le meme ");
+    //     console.log("le meme");
+    //     //this.router.navigate(['/accueil'])
+    //   }else{
+    //     console.log("pas le meme ");
         
-      }
-        try {
-          const tokenInfo: any = jwt_decode(token)
-          const expireDate: any = tokenInfo.exp; 
-          console.log("tokenInfo = %o and expireDate = %o", tokenInfo, expireDate)
+    //   }
+    //     try {
+    //       const tokenInfo: any = jwt_decode(token)
+    //       const expireDate: any = tokenInfo.exp; 
+    //       console.log("tokenInfo = %o and expireDate = %o", tokenInfo, expireDate)
           
-          return jwt_decode(token);
-        } catch(Error) {
-          return null;
-        }
+    //       return jwt_decode(token);
+    //     } catch(Error) {
+    //       return null;
+    //     }
         
 
   }
@@ -56,14 +56,21 @@ export class LoginComponent implements OnInit {
   let user = data.value
   this.loginServ.loginRegister(user)
     .subscribe((response: any) => {
-      console.log(response);
-      this.loginServ.setToken(response)
-      this.DecodedToken(response)
+
+      console.log(JSON.parse(response));
+      const token = JSON.parse(response);
+      
+
+      this.loginServ.setToken(token)
       this.router.navigate(["/accueil"])
+
+      //this.DecodedToken(token)
+      
+      
     },
     (error) => {
       if (error.status === 403) {
-        this.mode = 1;
+        this.status = 1;
       }
     });
 }
@@ -71,16 +78,16 @@ export class LoginComponent implements OnInit {
 
 
 
-DecodedToken(token: string ): any {
-try {
-  const tokenInfo: any = jwt_decode(token)
-  const expireDate: any = tokenInfo.exp; 
-  console.log("tokenInfo = %o and expireDate = %o", tokenInfo, expireDate)
-  return jwt_decode(token);
-} catch(Error) {
-  return null;
-}
-}
+// DecodedToken(token: string ): any {
+// try {
+//   const tokenInfo: any = jwt_decode(token)
+//   const expireDate: any = tokenInfo.exp; 
+//   console.log("tokenInfo = %o and expireDate = %o", tokenInfo, expireDate)
+//   return jwt_decode(token);
+// } catch(Error) {
+//   return null;
+// }
+// }
   
 
 }

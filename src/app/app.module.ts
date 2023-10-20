@@ -8,7 +8,7 @@ import { AccueilComponent } from './accueil/accueil.component';
 import { FormsModule } from "@angular/forms"
 import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { LoadingComponent } from './loading/loading.component';
-import { ApiInterceptorService } from './api-interceptor.service';
+import { InterceptHttpInterceptor } from './intercept-http.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,11 @@ import { ApiInterceptorService } from './api-interceptor.service';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: InterceptHttpInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

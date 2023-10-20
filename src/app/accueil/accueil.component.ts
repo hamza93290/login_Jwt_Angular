@@ -1,7 +1,7 @@
 
 import { LoginService } from '../services/login.service';
 import { Login } from '../models/login';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DTOInfoUser } from '../models/DTOInfoUser';
 
@@ -12,6 +12,20 @@ import { DTOInfoUser } from '../models/DTOInfoUser';
 })
 export class AccueilComponent implements OnInit {
 
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) { 
+    console.log(event.key);
+  }
+
+  // @HostListener('document:mousemove', ['$event']) 
+  // onMouseMove(e : MouseEvent) {
+  //   console.log(e);
+  // }
+
+  @HostListener('document:click', ['$event']) 
+  onMouseclick(e : MouseEvent) {
+    console.log(e);
+  }
   constructor(private loginServive : LoginService , private route : Router){}
 
 
@@ -20,13 +34,18 @@ export class AccueilComponent implements OnInit {
     email: '',
     roles: ''
   };
+
+  accesToken : string = "accessToken";
+  token : string = "token"
   
   ngOnInit(): void {
     
-      const token = this.loginServive.getToken()
-      this.loginServive.setToken(token)
+      const token = this.loginServive.getAccesToken();
+      
+      
+      //this.loginServive.setToken(token)
 
-      this.loginServive.getUserDetails(this.loginServive.getToken()).subscribe((res: DTOInfoUser)=> {
+      this.loginServive.getUserDetails(token).subscribe((res: DTOInfoUser)=> {
         console.log(res);
         
         this.userInfo.username = res.name;
@@ -36,7 +55,7 @@ export class AccueilComponent implements OnInit {
        (error) => {
          if (error.status === 0) {
            
-          this.route.navigate(["/login"])
+          //this.route.navigate(["/login"])
            
          }
        });

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, ObservedValuesFromArray } from 'rxjs';
 import { Login } from '../models/login';
 
 @Injectable({
@@ -36,16 +36,25 @@ export class LoginService {
   }
 
   setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
-
-    const expirationTimeInMinutes = 5;
-    setTimeout(() => {
-      this.removeToken();
-    }, expirationTimeInMinutes * 60 * 1000);
+    localStorage.setItem(this.tokenKey,  JSON.stringify(token));
   }
 
-  getToken(): any  {
-    return localStorage.getItem(this.tokenKey);
+  getAccesToken() : string  {
+
+    const storedValue = localStorage.getItem(this.tokenKey);
+    const myObject = JSON.parse(storedValue + "");
+    console.log(myObject.accessToken);
+    
+    return myObject.accessToken;
+  }
+
+  getToken() : string  {
+
+    const storedValue = localStorage.getItem(this.tokenKey);
+    const myObject = JSON.parse(storedValue + "");
+    console.log(myObject.token);
+    
+    return myObject.token;
   }
 
   removeToken(): void {
@@ -54,17 +63,23 @@ export class LoginService {
 
   }
 
-  // Méthode pour vérifier si le token stocké est le même que le token passé en paramètre
-  isTokenValid(token: any): boolean {
-    if(token == null){
-      return false
-    }else{
-      const storedToken = this.getToken();
-      return storedToken === token;
-    }
-    
-  }
 
+
+  // Méthode pour vérifier si le token stocké est le même que le token passé en paramètre
+  // isTokenValid(token: any): boolean {
+  //   if(token == null){
+  //     return false
+  //   }else{
+  //     const storedToken = this.getToken();
+  //     return storedToken === token;
+  //   }
+    
+  // }
+
+  getRefreshToken(token: string): Observable<any>{
+
+    return this.httpClient.post (`${this.apiUrl}/auth/refreshToken`, {"token" : token, })
+  }
 
   getUserProfile(token: string) : Observable<any>  {
     // Create headers with the Authorization header containing the token
@@ -104,7 +119,7 @@ export class LoginService {
 
     // Make the request to the back-end
 
-    return this.httpClient.get('http://localhost:8080/auth/userDetail', options)
+    return this.httpClient.get('http://localhost:8080/auth/userdetails', options)
   }
 
 
